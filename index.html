@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCUC ISD - AI Leadership Learning Series</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1B4965;
+            --secondary: #5FA8D3;
+            --accent: #62B6CB;
+            --light: #BEE9E8;
+            --highlight: #CAE9FF;
+            --dark: #0D1B2A;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --danger: #F44336;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--dark);
+        }
+
+        .scuc-primary {
+            background-color: var(--primary);
+        }
+
+        .scuc-secondary {
+            background-color: var(--secondary);
+        }
+
+        .scuc-accent {
+            background-color: var(--accent);
+        }
+
+        .scuc-light {
+            background-color: var(--light);
+        }
+
+        .scuc-text-primary {
+            color: var(--primary);
+        }
+
+        .scuc-text-secondary {
+            color: var(--secondary);
+        }
+
+        .header-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+
+        .header-wave svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 78px;
+        }
+
+        .header-wave .shape-fill {
+            fill: #FFFFFF;
+        }
+
+        .timeline-item {
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: var(--accent);
+            top: 0;
+            bottom: 0;
+            left: 25px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 16px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .chat-bubble {
+            position: relative;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .chat-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 15px;
+            width: 0;
+            height: 0;
+            border: 15px solid transparent;
+            border-top-color: currentColor;
+            border-bottom: 0;
+            margin-left: -7.5px;
+            margin-bottom: -15px;
+        }
+
+        .user-bubble {
+            background-color: var(--light);
+            color: var(--dark);
+            margin-left: 30px;
+        }
+
+        .ai-bubble {
+            background-color: var(--primary);
+            color: white;
+            margin-right: 30px;
+        }
+
+        .user-bubble::after {
+            border-top-color: var(--light);
+        }
+
+        .ai-bubble::after {
+            border-top-color: var(--primary);
+            left: auto;
+            right: 15px;
+        }
+
+        .bot-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .bot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .benefit-card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            height: 10px;
+            border-radius: 5px;
+            background: var(--light);
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(95, 168, 211, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(95, 168, 211, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(95, 168, 211, 0);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .testimonial-card {
+            transition: transform 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: scale(1.03);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        .day-in-life-card {
+            transition: all 0.3s ease;
+        }
+        
+        .day-in-life-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Custom checkbox styles */
+        .custom-checkbox {
+            width: 25px;
+            height: 25px;
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 5px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .custom-checkbox.checked {
+            background-color: var(--primary);
+        }
+        
+        .custom-checkbox i {
+            color: white;
+            display: none;
+        }
+        
+        .custom-checkbox.checked i {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Hero Section -->
+    <header class="scuc-primary text-white relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="animate-fade-in" style="animation-delay: 0.2s;">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4">
+                    Eclatech Solutions -AI Leadership Learning Series
+                </h1>
+                <p class="text-xl sm:text-2xl md:text-3xl text-light mb-8">Interactive Proposal</p>
+                <div class="mx-auto w-32 h-32 rounded-full bg-white flex items-center justify-center mb-8">
+                    <div class="text-5xl font-bold scuc-text-primary">SCUC</div>
+                </div>
+                <p class="text-xl max-w-3xl mx-auto mb-12">
+                    Experience how AI can transform administrative workflows and create more time for what matters most: supporting teachers and students.
+                </p>
+                <button id="exploreBtn" class="bg-white scuc-text-primary hover:bg-gray-100 font-bold py-3 px-8 rounded-full text-lg shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none">
+                    <i class="fas fa-rocket mr-2"></i> Begin Journey
+                </button>
+            </div>
+        </div>
+        <div class="header-wave">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </header>
+
+    <!-- Program Overview -->
+    <section id="overview" class="py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 scuc-text-primary">Program Overview</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="reveal benefit-card bg-white shadow-lg p-6 text-center">
+                    <div class="rounded-full scuc-light mx-auto w-20 h-20 flex items-center justify-center mb-4">
+                        <i class="fas fa-brain text-3xl scuc-text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Strategic AI Fluency</h3>
+                    <p class="text-gray-600">Build foundational understanding of AI's role in education and administrative efficiency</p>
+                </div>
+                <div class="reveal benefit-card bg-white shadow-lg p-6 text-center" style="animation-delay: 0.2s;">
+                    <div class="rounded-full scuc-light mx-auto w-20 h-20 flex items-center justify-center mb-4">
+                        <i class="fas fa-robot text-3xl scuc-text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Hands-On Bot Building</h3>
+                    <p class="text-gray-600">Create custom AI workflows that address your specific administrative challenges</p>
+                </div>
+                <div class="reveal benefit-card bg-white shadow-lg p-6 text-center" style="animation-delay: 0.4s;">
+                    <div class="rounded-full scuc-light mx-auto w-20 h-20 flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-3xl scuc-text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Measurable Efficiency</h3>
+                    <p class="text-gray-600">Achieve a 15% reduction in administrative workload with detailed metrics</p>
+                </div>
+            </div>
+            
+            <div class="mt-16 bg-white p-8 rounded-lg shadow-lg">
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <div class="mb-8 md:mb-0 md:w-1/2">
+                        <h3 class="text-2xl font-bold mb-4 scuc-text-primary">Program Impact</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <span class="flex-shrink-0 h-6 w-6 rounded-full scuc-accent flex items-center justify-center mr-3">
+                                    <i class="fas fa-check text-white"></i>
+                                </span>
+                                <span>15% reduction in administrative workload</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="flex-shrink-0 h-6 w-6 rounded-full scuc-accent flex items-center justify-center mr-3">
+                                    <i class="fas fa-check text-white"></i>
+                                </span>
+                                <span>3+ hours saved per leader per week</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="flex-shrink-0 h-6 w-6 rounded-full scuc-accent flex items-center justify-center mr-3">
+                                    <i class="fas fa-check text-white"></i>
+                                </span>
+                                <span>≥60% of participants launch pilot bots within 30 days</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="flex-shrink-0 h-6 w-6 rounded-full scuc-accent flex items-center justify-center mr-3">
+                                    <i class="fas fa-check text-white"></i>
+                                </span>
+                                <span>Net Promoter Score ≥ +40</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="chart-container">
+                            <canvas id="efficiencyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Timeline -->
+    <section id="timeline" class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-100">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 scuc-text-primary">Program Timeline</h2>
+            
+            <div class="relative">
+                <div class="timeline-item pl-12 md:pl-16 pb-12 reveal">
+                    <div class="timeline-dot top-0"></div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                            <h3 class="text-2xl font-bold scuc-text-primary">Phase 1: Foundations</h3>
+                            <span class="mt-2 md:mt-0 px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">Month 1 (May)</span>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2">Audience: Executive Leadership Team</h4>
+                        <p class="text-gray-600 mb-4">A 60-minute session focused on AI demystification and establishing a practical framework for streamlining administrative workflows.</p>
+                        
+                        <div class="bg-gray-50 p-4 rounded-md">
+                            <h5 class="font-semibold mb-2">Key Deliverables:</h5>
+                            <ul class="space-y-2">
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-5 w-5 rounded-full scuc-accent flex items-center justify-center mr-2">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </span>
+                                    <span>AI demystification session and practical framework</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-5 w-5 rounded-full scuc-accent flex items-center justify-center mr-2">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </span>
+                                    <span>Foundations of prompt techniques through advanced prompting strategies</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item pl-12 md:pl-16 pb-12 reveal">
+                    <div class="timeline-dot top-0"></div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                            <h3 class="text-2xl font-bold scuc-text-primary">Phase 2: Workshop</h3>
+                            <span class="mt-2 md:mt-0 px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">Month 2 (June)</span>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2">Audience: Principals & Administrative Cabinet</h4>
+                        <p class="text-gray-600 mb-4">A 60-90 minute interactive workshop where participants gain hands-on experience creating functional AI bots tailored to their specific needs.</p>
+                        
+                        <div class="bg-gray-50 p-4 rounded-md">
+                            <h5 class="font-semibold mb-2">Key Deliverables:</h5>
+                            <ul class="space-y-2">
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-5 w-5 rounded-full scuc-accent flex items-center justify-center mr-2">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </span>
+                                    <span>Data-analysis integrations and workflow automation</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-5 w-5 rounded-full scuc-accent flex items-center justify-center mr-2">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </span>
+                                    <span>Vision and content creation workflows using AI-powered tools</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-5 w-5 rounded-full scuc-accent flex items-center justify-center mr-2">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </span>
+                                    <span>Crisis-management workflows and rapid-response bot templates</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-5 w-5 rounded-full scuc-accent flex items-center justify-center mr-2">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </span>
+                                    <span>Development of various functional bots (IEP summaries, conference recaps, etc.)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item pl-12 md:pl-16 pb-12 reveal">
+                    <div class="timeline-dot top-0"></div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                            <h3 class="text-2xl font-bold scuc-text-primary">Phase 3: Capstone</h3>
+                            <span class="mt-2 md:mt-0 px-4 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">Month 3 (July)</span>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2">Audience: All Cohorts</h4>
+                        <p class="text-gray-600 mb-4">A comprehensive capstone session that establishes a district-wide implementation plan with clear metrics and guidance.</p>
+                        
+                        <div class="bg-gray-50 p-4 rounded-md">
+                            <h5 class="font-semibold mb-2">Key Deliverables:</h5>
+                            <ul class="space-y-2">
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-5 w-5 rounded-full scuc-accent flex items-center justify-center mr-2">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </span>
+                                    <span>District-wide rollout roadmap</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-5 w-5 rounded-full scuc-accent flex items-center justify-center mr-2">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </span>
+                                    <span>Scaling playbook with milestones and adoption metrics</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-5 w-5 rounded-full scuc-accent flex items-center justify-center mr-2">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </span>
+                                    <span>30-Day coaching check-in</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item pl-12 md:pl-16 reveal">
+                    <div class="timeline-dot top-0"></div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                            <h3 class="text-2xl font-bold scuc-text-primary">Ongoing Support</h3>
+                            <span class="mt-2 md:mt-0 px-4 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">6 Months Access</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Continuous access to proprietary resource hubs and support to ensure sustained implementation success.</p>
+                        
+                        <div class="bg-gray-50 p-4 rounded-md">
+                            <h5 class="font-semibold mb-2">Included Resources:</h5>
+                            <ul class="space-y-2">
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-5 w-5 rounded-full scuc-accent flex items-center justify-center mr-2">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </span>
+                                    <span>AI Prompt Engineering Resource Hub</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-5 w-5 rounded-full scuc-accent flex items-center justify-center mr-2">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </span>
+                                    <span>Administrative Productivity Resource Hub</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-5 w-5 rounded-full scuc-accent flex items-center justify-center mr-2">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </span>
+                                    <span>Post-session support and collaborative review</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="flex-shrink-0 h-5 w-5 rounded-full scuc-accent flex items-center justify-center mr-2">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </span>
+                                    <span>Community of practice for sharing experiences and best practices</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bot Creation Simulation -->
+    <section id="bot-demo" class="py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 scuc-text-primary">Experience AI Bot Creation</h2>
+            <p class="text-lg text-center max-w-3xl mx-auto mb-12">See how easily district leaders can create custom AI assistants during our hands-on workshops. Try the interactive demo below.</p>
+            
+            <div class="bg-white rounded-lg shadow-xl p-6 max-w-4xl mx-auto reveal">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold">IEP Meeting Summary Bot Creator</h3>
+                    <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                        <i class="fas fa-check-circle mr-1"></i> FERPA Compliant
+                    </div>
+                </div>
+                
+                <div class="space-y-6 mb-8">
+                    <div>
+                        <label for="botName" class="block text-sm font-medium text-gray-700 mb-1">Bot Name</label>
+                        <input type="text" id="botName" value="IEP Meeting Assistant" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="botTask" class="block text-sm font-medium text-gray-700 mb-1">Bot Task</label>
+                        <select id="botTask" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="summarize">Summarize IEP Meeting Notes</option>
+                            <option value="create">Create Action Items from Meeting</option>
+                            <option value="track">Track IEP Goal Progress</option>
+                            <option value="custom">Custom Task</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="botPrompt" class="block text-sm font-medium text-gray-700 mb-1">Bot Instructions (Prompt)</label>
+                        <textarea id="botPrompt" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">Create a concise summary of an IEP meeting that includes: 1) Key discussion points, 2) Specific accommodations agreed upon, 3) Next steps and responsible parties, 4) Timeline for follow-up. Format the summary in a clear, professional manner suitable for both internal documentation and parent communication. Remove any sensitive personal details according to FERPA guidelines.</textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Features</label>
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <div id="checkbox1" class="custom-checkbox checked">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <span>Email notifications for action items</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div id="checkbox2" class="custom-checkbox checked">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <span>Calendar integration for follow-ups</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div id="checkbox3" class="custom-checkbox">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <span>Document management system integration</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center">
+                    <button id="createBotBtn" class="scuc-primary text-white hover:bg-blue-700 font-bold py-3 px-8 rounded-lg text-lg shadow-lg transition-all duration-300 focus:outline-none">
+                        <i class="fas fa-robot mr-2"></i> Create Bot
+                    </button>
+                </div>
+                
+                <div id="botDemoResult" class="mt-8 hidden">
+                    <h4 class="font-bold text-lg mb-4">Bot Demo: IEP Meeting Summary</h4>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <div class="chat-bubble user-bubble">
+                            Here are my notes from today's IEP meeting for Alex Johnson: Met with parents (Tom and Sarah), Special Ed teacher Mrs. Garcia, General Ed teacher Mr. Patel, and school psychologist Dr. Wells. Alex is struggling with reading comprehension and time management. Reading level is 2 grades below. Math skills are on grade level. Parents reported frustration at home with homework completion. Alex enjoys science and technology. We discussed extended time for assignments and reading support. Parents want weekly progress updates. Next meeting in 3 months.
+                        </div>
+                        
+                        <div id="aiResponse" class="chat-bubble ai-bubble hidden">
+                            <h5 class="font-bold">IEP Meeting Summary: Student Support Plan</h5>
+                            <p class="text-sm mb-3">Meeting Date: [Current Date]</p>
+                            
+                            <h6 class="font-semibold mt-3">Key Discussion Points:</h6>
+                            <ul class="list-disc pl-5 text-sm mb-3">
+                                <li>Current assessment indicates reading comprehension is below grade level expectations</li>
+                                <li>Mathematics performance is at grade level</li>
+                                <li>Homework completion presents challenges</li>
+                                <li>Student demonstrates interest and engagement in science and technology subjects</li>
+                            </ul>
+                            
+                            <h6 class="font-semibold mt-3">Accommodations Agreed Upon:</h6>
+                            <ul class="list-disc pl-5 text-sm mb-3">
+                                <li>Extended time allotment for assignment completion</li>
+                                <li>Supplemental reading support services</li>
+                            </ul>
+                            
+                            <h6 class="font-semibold mt-3">Next Steps & Responsibilities:</h6>
+                            <ul class="list-disc pl-5 text-sm mb-3">
+                                <li>Special Education Teacher (Mrs. Garcia): Implement reading support interventions</li>
+                                <li>General Education Teacher (Mr. Patel): Provide extended time accommodations</li>
+                                <li>Administrative Staff: Schedule weekly progress communications with family</li>
+                            </ul>
+                            
+                            <h6 class="font-semibold mt-3">Follow-up Timeline:</h6>
+                            <p class="text-sm">Progress review meeting scheduled in 3 months</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-16">
+                <div class="bot-card bg-white p-6 rounded-lg shadow-lg reveal">
+                    <div class="h-14 w-14 rounded-full scuc-accent flex items-center justify-center mb-4">
+                        <i class="fas fa-file-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Parent Conference Recap Bot</h3>
+                    <p class="text-gray-600 mb-4">Automatically generate comprehensive parent-teacher conference summaries with action items and follow-up reminders.</p>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Time Saved:</span>
+                        <span class="font-medium">45 min/conference</span>
+                    </div>
+                </div>
+                
+                <div class="bot-card bg-white p-6 rounded-lg shadow-lg reveal" style="animation-delay: 0.2s;">
+                    <div class="h-14 w-14 rounded-full scuc-accent flex items-center justify-center mb-4">
+                        <i class="fas fa-clipboard-list text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Board Brief FAQ Generator</h3>
+                    <p class="text-gray-600 mb-4">Transform board meeting minutes into concise briefs with anticipated Q&A for stakeholders.</p>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Time Saved:</span>
+                        <span class="font-medium">3-4 hours/meeting</span>
+                    </div>
+                </div>
+                
+                <div class="bot-card bg-white p-6 rounded-lg shadow-lg reveal" style="animation-delay: 0.4s;">
+                    <div class="h-14 w-14 rounded-full scuc-accent flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-bar text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Student Performance Alert System</h3>
+                    <p class="text-gray-600 mb-4">Monitor student data in real-time and generate personalized intervention recommendations.</p>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Time Saved:</span>
+                        <span class="font-medium">5+ hours/week</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Day in the Life Comparison -->
+    <section id="day-in-life" class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-100">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-6 scuc-text-primary">A Day in the Life</h2>
+            <p class="text-lg text-center max-w-3xl mx-auto mb-12">Experience the transformation in a principal's daily workflow before and after implementing AI solutions.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="day-in-life-card bg-white rounded-lg shadow-lg overflow-hidden reveal">
+                    <div class="bg-gray-200 text-gray-800 py-3 px-6">
+                        <h3 class="text-xl font-bold">Before AI Implementation</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <span class="flex-shrink-0 text-gray-400 font-medium w-20">7:30 AM</span>
+                                <div>
+                                    <p class="font-medium">Morning Emails</p>
+                                    <p class="text-gray-600 text-sm">45 minutes sorting through inbox and crafting responses</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <span class="flex-shrink-0 text-gray-400 font-medium w-20">9:00 AM</span>
+                                <div>
+                                    <p class="font-medium">IEP Meeting</p>
+                                    <p class="text-gray-600 text-sm">60 minutes in meeting + 30 minutes manual note-taking</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <span class="flex-shrink-0 text-gray-400 font-medium w-20">11:00 AM</span>
+                                <div>
+                                    <p class="font-medium">Teacher Observation</p>
+                                    <p class="text-gray-600 text-sm">30 minutes observation + 45 minutes writing feedback</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <span class="flex-shrink-0 text-gray-400 font-medium w-20">1:00 PM</span>
+                                <div>
+                                    <p class="font-medium">Parent Communications</p>
+                                    <p class="text-gray-600 text-sm">60 minutes drafting emails and making calls</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <span class="flex-shrink-0 text-gray-400 font-medium w-20">2:30 PM</span>
+                                <div>
+                                    <p class="font-medium">Data Analysis</p>
+                                    <p class="text-gray-600 text-sm">90 minutes compiling and analyzing attendance and performance data</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <span class="flex-shrink-0 text-gray-400 font-medium w-20">4:30 PM</span>
+                                <div>
+                                    <p class="font-medium">Report Preparation</p>
+                                    <p class="text-gray-600 text-sm">60 minutes preparing board meeting materials</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold">Time in Administrative Tasks:</span>
+                                <span class="font-bold text-red-600">5.5 hours</span>
+                            </div>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="font-bold">Time with Students/Teachers:</span>
+                                <span class="font-bold text-gray-600">2.5 hours</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="day-in-life-card bg-white rounded-lg shadow-lg overflow-hidden reveal">
+                    <div class="scuc-primary text-white py-3 px-6">
+                        <h3 class="text-xl font-bold">After AI Implementation</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <span class="flex-shrink-0 text-gray-400 font-medium w-20">7:30 AM</span>
+                                <div>
+                                    <p class="font-medium">Morning Emails <span class="text-green-600 text-xs font-semibold">AI ASSISTED</span></p>
+                                    <p class="text-gray-600 text-sm">15 minutes reviewing AI-drafted responses and sending</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <span class="flex-shrink-0 text-gray-400 font-medium w-20">8:15 AM</span>
+                                <div>
+                                    <p class="font-medium">Classroom Walk-throughs</p>
+                                    <p class="text-gray-600 text-sm">45 minutes observing instruction and connecting with students</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <span class="flex-shrink-0 text-gray-400 font-medium w-20">9:00 AM</span>
+                                <div>
+                                    <p class="font-medium">IEP Meeting <span class="text-green-600 text-xs font-semibold">AI ASSISTED</span></p>
+                                    <p class="text-gray-600 text-sm">60 minutes in meeting + 5 minutes reviewing AI-generated summary</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <span class="flex-shrink-0 text-gray-400 font-medium w-20">11:00 AM</span>
+                                <div>
+                                    <p class="font-medium">Teacher Observation <span class="text-green-600 text-xs font-semibold">AI ASSISTED</span></p>
+                                    <p class="text-gray-600 text-sm">45 minutes observation + 15 minutes enhancing AI-drafted feedback</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <span class="flex-shrink-0 text-gray-400 font-medium w-20">1:00 PM</span>
+                                <div>
+                                    <p class="font-medium">Teacher Coaching Session</p>
+                                    <p class="text-gray-600 text-sm">60 minutes of direct instructional coaching</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <span class="flex-shrink-0 text-gray-400 font-medium w-20">2:30 PM</span>
+                                <div>
+                                    <p class="font-medium">Data Analysis <span class="text-green-600 text-xs font-semibold">AI ASSISTED</span></p>
+                                    <p class="text-gray-600 text-sm">30 minutes reviewing AI-generated insights and reports</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <span class="flex-shrink-0 text-gray-400 font-medium w-20">3:15 PM</span>
+                                <div>
+                                    <p class="font-medium">Student Support Meeting</p>
+                                    <p class="text-gray-600 text-sm">45 minutes collaborating with counselors on student needs</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <span class="flex-shrink-0 text-gray-400 font-medium w-20">4:15 PM</span>
+                                <div>
+                                    <p class="font-medium">Report Review <span class="text-green-600 text-xs font-semibold">AI ASSISTED</span></p>
+                                    <p class="text-gray-600 text-sm">15 minutes reviewing AI-prepared board meeting materials</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold">Time in Administrative Tasks:</span>
+                                <span class="font-bold text-green-600">1.25 hours</span>
+                            </div>
+                            <div class="flex justify-between items-center mt-2">
+                                <span class="font-bold">Time with Students/Teachers:</span>
+                                <span class="font-bold scuc-text-primary">6.75 hours</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI Calculator -->
+    <section id="roi-calculator" class="py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-6 scuc-text-primary">ROI Calculator</h2>
+            <p class="text-lg text-center max-w-3xl mx-auto mb-12">See the potential impact of the AI Leadership Learning Series on your district's efficiency and resource allocation.</p>
+            
+            <div class="bg-white rounded-lg shadow-xl p-8 max-w-4xl mx-auto reveal">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-bold mb-6">Input Parameters</h3>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label for="numAdmins" class="block text-sm font-medium text-gray-700 mb-1">Number of Administrators</label>
+                                <input type="range" id="numAdmins" min="5" max="50" value="15" class="slider w-full">
+                                <div class="flex justify-between text-sm text-gray-500 mt-1">
+                                    <span>5</span>
+                                    <span id="numAdminsValue">15</span>
+                                    <span>50</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="hoursPerWeek" class="block text-sm font-medium text-gray-700 mb-1">Avg. Administrative Hours per Week</label>
+                                <input type="range" id="hoursPerWeek" min="10" max="30" value="20" class="slider w-full">
+                                <div class="flex justify-between text-sm text-gray-500 mt-1">
+                                    <span>10 hrs</span>
+                                    <span id="hoursPerWeekValue">20 hrs</span>
+                                    <span>30 hrs</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="avgHourlyRate" class="block text-sm font-medium text-gray-700 mb-1">Avg. Administrator Hourly Rate</label>
+                                <input type="range" id="avgHourlyRate" min="40" max="100" value="60" class="slider w-full">
+                                <div class="flex justify-between text-sm text-gray-500 mt-1">
+                                    <span>$40</span>
+                                    <span id="avgHourlyRateValue">$60</span>
+                                    <span>$100</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="efficiencyGain" class="block text-sm font-medium text-gray-700 mb-1">Expected Efficiency Gain</label>
+                                <input type="range" id="efficiencyGain" min="5" max="30" value="15" class="slider w-full">
+                                <div class="flex justify-between text-sm text-gray-500 mt-1">
+                                    <span>5%</span>
+                                    <span id="efficiencyGainValue">15%</span>
+                                    <span>30%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold mb-6">Projected ROI</h3>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-700 mb-2">Weekly Hours Saved</p>
+                                <div class="flex items-end">
+                                    <span id="hoursWeeklySaved" class="text-4xl font-bold scuc-text-primary">45</span>
+                                    <span class="text-gray-500 ml-2">hours/week</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <p class="text-sm font-medium text-gray-700 mb-2">Annual Cost Savings</p>
+                                <div class="flex items-end">
+                                    <span id="annualSavings" class="text-4xl font-bold scuc-text-primary">$140,400</span>
+                                    <span class="text-gray-500 ml-2">/year</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <p class="text-sm font-medium text-gray-700 mb-2">Return on Investment</p>
+                                <div class="flex items-end">
+                                    <span id="roi" class="text-4xl font-bold scuc-text-primary">1,304%</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <p class="text-sm font-medium text-gray-700 mb-2">Program Payback Period</p>
+                                <div class="flex items-end">
+                                    <span id="paybackPeriod" class="text-4xl font-bold scuc-text-primary">3.7</span>
+                                    <span class="text-gray-500 ml-2">weeks</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <h3 class="text-xl font-bold mb-4">Reinvest Time In:</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="bg-blue-50 p-4 rounded-md">
+                            <div class="flex items-center">
+                                <div class="rounded-full bg-blue-100 p-2 mr-3">
+                                    <i class="fas fa-chalkboard-teacher text-blue-600"></i>
+                                </div>
+                                <span class="font-medium">Teacher Coaching</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-green-50 p-4 rounded-md">
+                            <div class="flex items-center">
+                                <div class="rounded-full bg-green-100 p-2 mr-3">
+                                    <i class="fas fa-users text-green-600"></i>
+                                </div>
+                                <span class="font-medium">Student Support</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-purple-50 p-4 rounded-md">
+                            <div class="flex items-center">
+                                <div class="rounded-full bg-purple-100 p-2 mr-3">
+                                    <i class="fas fa-lightbulb text-purple-600"></i>
+                                </div>
+                                <span class="font-medium">Program Innovation</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resource Hubs -->
+    <section id="resources" class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-100">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-6 scuc-text-primary">Six-Month Access to Proprietary Resource Hubs</h2>
+            <p class="text-lg text-center max-w-3xl mx-auto mb-12">Your subscription includes access to two comprehensive K-12 focused resource collections.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden reveal">
+                    <div class="scuc-primary text-white p-6">
+                        <h3 class="text-2xl font-bold flex items-center">
+                            <i class="fas fa-code mr-3"></i> AI Prompt Engineering Hub
+                        </h3>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full scuc-light flex items-center justify-center mr-3">
+                                <i class="fas fa-sitemap scuc-text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Workflow Guide</h4>
+                                <p class="text-sm text-gray-600">"Ask → Clarify → Deliver" model with quick-tip checklists for crafting precise prompts</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full scuc-light flex items-center justify-center mr-3">
+                                <i class="fas fa-th-large scuc-text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Domain Templates</h4>
+                                <p class="text-sm text-gray-600">Turnkey guidance across educational functions with K-12 specific use cases</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full scuc-light flex items-center justify-center mr-3">
+                                <i class="fas fa-book scuc-text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Examples Library</h4>
+                                <p class="text-sm text-gray-600">Ready-to-use prompt templates for common administrative tasks in education</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full scuc-light flex items-center justify-center mr-3">
+                                <i class="fas fa-toolbox scuc-text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Tool Directory</h4>
+                                <p class="text-sm text-gray-600">Curated links to leading AI platforms with education-specific integrations</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden reveal">
+                    <div class="scuc-accent text-white p-6">
+                        <h3 class="text-2xl font-bold flex items-center">
+                            <i class="fas fa-rocket mr-3"></i> Administrative Productivity Hub
+                        </h3>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full scuc-light flex items-center justify-center mr-3">
+                                <i class="fas fa-shield-alt scuc-text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Compliance-First Interface</h4>
+                                <p class="text-sm text-gray-600">Privacy-aware "ask-before-act" design ensures alignment with FERPA and student-data regulations</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full scuc-light flex items-center justify-center mr-3">
+                                <i class="fas fa-file-alt scuc-text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Prompt Template Kit</h4>
+                                <p class="text-sm text-gray-600">Session-based templates covering email drafting, strategic planning, and meeting management</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full scuc-light flex items-center justify-center mr-3">
+                                <i class="fas fa-puzzle-piece scuc-text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Interactive Use Cases</h4>
+                                <p class="text-sm text-gray-600">Guided walkthroughs demonstrating AI applications in student engagement and accessibility compliance</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full scuc-light flex items-center justify-center mr-3">
+                                <i class="fas fa-photo-video scuc-text-primary"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Resource Gallery</h4>
+                                <p class="text-sm text-gray-600">Hand-picked productivity and content-creation tool recommendations for educational leaders</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+ 
+
+    <!-- Investment & CTA -->
+    <section id="investment" class="py-16 px-4 sm:px-6 lg:px-8 scuc-primary text-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Investment & Terms</h2>
+                    <div class="bg-white text-gray-800 rounded-lg p-8 shadow-lg">
+                        <div class="flex items-center justify-center">
+                            <span class="text-4xl font-bold scuc-text-primary mr-2">$10,000</span>
+                            <span class="text-lg text-gray-600">USD</span>
+                        </div>
+                        
+                        <div class="border-t border-gray-200 mt-6 pt-6">
+                            <h3 class="font-bold text-lg mb-4">What's Included:</h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i>
+                                    <span>Full session design, facilitation, and customization</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i>
+                                    <span>Hands-on bot-building workshop materials</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i>
+                                    <span>Six-month access to both online resource hubs</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i>
+                                    <span>Post-session support and action-item summaries</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i>
+                                    <span>30-day coaching check-in</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Next Steps</h2>
+                    <div class="bg-white text-gray-800 rounded-lg p-8 shadow-lg">
+                        <ol class="space-y-6">
+                            <li class="flex">
+                                <div class="flex-shrink-0 h-8 w-8 rounded-full scuc-accent flex items-center justify-center mr-3 text-white font-bold">
+                                    1
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Proposal Approval</h4>
+                                    <p class="text-gray-600">Initial commitment and contract signing</p>
+                                </div>
+                            </li>
+                            
+                            <li class="flex">
+                                <div class="flex-shrink-0 h-8 w-8 rounded-full scuc-accent flex items-center justify-center mr-3 text-white font-bold">
+                                    2
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Alignment & Roster Confirm</h4>
+                                    <p class="text-gray-600">Discovery call to tailor program to SCUC ISD's specific needs</p>
+                                </div>
+                            </li>
+                            
+                            <li class="flex">
+                                <div class="flex-shrink-0 h-8 w-8 rounded-full scuc-accent flex items-center justify-center mr-3 text-white font-bold">
+                                    3
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Begin Phase 1 Sessions</h4>
+                                    <p class="text-gray-600">Launch with the Foundations session in May</p>
+                                </div>
+                            </li>
+ 				<li class="flex">
+                                <div class="flex-shrink-0 h-8 w-8 rounded-full scuc-accent flex items-center justify-center mr-3 text-white font-bold">
+                                    4
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Phase 2 & 3 Sessions</h4>
+                                    <p class="text-gray-600">Workshops and Capstone in June and July</p>
+                                </div>
+                            </li>
+
+
+                        </ol>
+                        
+                        
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center">
+                        <div class="h-12 w-12 rounded-full bg-white flex items-center justify-center mr-3">
+                            <span class="text-xl font-bold text-gray-900">E</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Eclatech Solutions</h3>
+                            <p class="text-sm">Transforming education through AI innovation</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-300 hover:text-white">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-300 hover:text-white">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-300 hover:text-white">
+                        <i class="far fa-envelope text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-8 border-t border-gray-800 text-sm text-center">
+                <p>© 2025 Eclatech Solutions LLC. All rights reserved.</p>
+                <p class="mt-2">Prepared for: SCUC Independent School District</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Scroll reveal
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            function checkReveal() {
+                const windowHeight = window.innerHeight;
+                
+                revealElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    if (elementTop < windowHeight * 0.85) {
+                        element.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', checkReveal);
+            checkReveal(); // Check on load
+            
+            // Efficiency chart
+            const ctx = document.getElementById('efficiencyChart').getContext('2d');
+            const efficiencyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Email Management', 'Meeting Notes', 'Report Creation', 'Data Analysis', 'Parent Communication'],
+                    datasets: [
+                        {
+                            label: 'Before AI (hrs/week)',
+                            data: [5, 4, 6, 5, 3],
+                            backgroundColor: '#CAE9FF',
+                            borderColor: '#5FA8D3',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'After AI (hrs/week)',
+                            data: [1.5, 1, 2, 1.5, 1],
+                            backgroundColor: '#1B4965',
+                            borderColor: '#0D1B2A',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '15% Administrative Workload Reduction'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Hours per Week'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Bot creation demo
+            const createBotBtn = document.getElementById('createBotBtn');
+            const botDemoResult = document.getElementById('botDemoResult');
+            const aiResponse = document.getElementById('aiResponse');
+            
+            createBotBtn.addEventListener('click', function() {
+                createBotBtn.disabled = true;
+                createBotBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating Bot...';
+                
+                botDemoResult.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    aiResponse.classList.remove('hidden');
+                    createBotBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Bot Created';
+                    createBotBtn.classList.remove('scuc-primary');
+                    createBotBtn.classList.add('bg-green-600');
+                }, 1500);
+            });
+            
+            // Custom checkboxes
+            const checkboxes = document.querySelectorAll('.custom-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('click', function() {
+                    this.classList.toggle('checked');
+                });
+            });
+            
+            // ROI Calculator
+            const numAdmins = document.getElementById('numAdmins');
+            const numAdminsValue = document.getElementById('numAdminsValue');
+            const hoursPerWeek = document.getElementById('hoursPerWeek');
+            const hoursPerWeekValue = document.getElementById('hoursPerWeekValue');
+            const avgHourlyRate = document.getElementById('avgHourlyRate');
+            const avgHourlyRateValue = document.getElementById('avgHourlyRateValue');
+            const efficiencyGain = document.getElementById('efficiencyGain');
+            const efficiencyGainValue = document.getElementById('efficiencyGainValue');
+            
+            const hoursWeeklySaved = document.getElementById('hoursWeeklySaved');
+            const annualSavings = document.getElementById('annualSavings');
+            const roi = document.getElementById('roi');
+            const paybackPeriod = document.getElementById('paybackPeriod');
+            
+            function updateROICalculations() {
+                const admins = parseInt(numAdmins.value);
+                const hours = parseInt(hoursPerWeek.value);
+                const rate = parseInt(avgHourlyRate.value);
+                const efficiency = parseInt(efficiencyGain.value) / 100;
+                
+                // Update display values
+                numAdminsValue.textContent = admins;
+                hoursPerWeekValue.textContent = hours + ' hrs';
+                avgHourlyRateValue.textContent = '$' + rate;
+                efficiencyGainValue.textContent = efficiency * 100 + '%';
+                
+                // Calculate ROI metrics
+                const weeklyHoursSaved = Math.round(admins * hours * efficiency);
+                const weeklySavings = weeklyHoursSaved * rate;
+                const annualSavingsValue = weeklySavings * 52;
+                const roiValue = (annualSavingsValue - 10000) / 10000 * 100;
+                const paybackPeriodValue = 10000 / weeklySavings;
+                
+                // Update displays
+                hoursWeeklySaved.textContent = weeklyHoursSaved;
+                annualSavings.textContent = '$' + annualSavingsValue.toLocaleString();
+                roi.textContent = Math.round(roiValue) + '%';
+                paybackPeriod.textContent = paybackPeriodValue.toFixed(1);
+            }
+            
+            // Add event listeners to all sliders
+            numAdmins.addEventListener('input', updateROICalculations);
+            hoursPerWeek.addEventListener('input', updateROICalculations);
+            avgHourlyRate.addEventListener('input', updateROICalculations);
+            efficiencyGain.addEventListener('input', updateROICalculations);
+            
+            // Initialize calculations
+            updateROICalculations();
+            
+            // Smooth scrolling
+            document.getElementById('exploreBtn').addEventListener('click', function() {
+                document.getElementById('overview').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Contact button
+            document.getElementById('contactBtn').addEventListener('click', function() {
+                alert('Thank you for your interest in the AI Leadership Learning Series! In a real implementation, this would open a scheduling form to set up your discovery call.');
+            });
+        });
+    </script>
+</body>
+
+</html>
